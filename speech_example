@@ -1,0 +1,39 @@
+from microbit import *
+import speech
+
+"""
+This code is an example microbit code. It makes the microbit cry its cold when its cold, say "I can't breath" when it hears speech and say "Ow" when shaken.
+Its a demonstration of the text to speech module.
+
+Author: Devil
+"""
+
+
+# Set a slightly slower speed for clarity (default is 72)
+SPEECH_SPEED = 100
+
+while True:
+    # 1. Check for Shake
+    if accelerometer.was_gesture('shake'):
+        speech.say("Ow!", speed=SPEECH_SPEED)
+
+    # 2. Check for Voice/Loud Sound duration
+    # This checks if the sound has been loud for 2000ms (2 seconds)
+    if microphone.sound_level() > 100:
+        start_time = running_time()
+        while microphone.sound_level() > 100:
+            if running_time() - start_time > 2000:
+                speech.say("Help I can't breathe", speed=SPEECH_SPEED)
+                break 
+
+    # 3. Check Temperature
+    # temperature() returns the value in Celsius
+    if temperature() < 9:
+        speech.say("I am so cold", speed=SPEECH_SPEED)
+        # We add a longer sleep here so it doesn't spam the phrase 
+        # constantly while the temp is low
+        sleep(5000)
+
+    sleep(100)
+
+## Written with by Google GEMINI
